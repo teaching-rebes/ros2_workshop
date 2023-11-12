@@ -15,6 +15,7 @@ class Doubler(Node):
             self.listener_callback,
             10)
         self.subscription  # avoid warning that subscription is not used
+        self.publisher_ = self.create_publisher(Float64, 'doubles', 10)
 
     def listener_callback(self, msg):
         self.get_logger().info('received new sensor value: "%.1f"' % msg.data)
@@ -22,8 +23,11 @@ class Doubler(Node):
 
     def process_value(self, value):
         processed_value = 2 * value;
-        self.get_logger().info('output: "%.1f"' % processed_value)
-        # TODO: publish processed value as new topic
+        # publish processed value as new topic
+        msg = Float64() # create a new message to be published
+        msg.data = processed_value
+        self.get_logger().info('publishing: "%.1f"' % processed_value)
+        self.publisher_.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
