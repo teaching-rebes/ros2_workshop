@@ -1,4 +1,5 @@
 import rclpy
+import random
 from rclpy.node import Node
 
 from std_msgs.msg import Float64
@@ -23,6 +24,8 @@ class RndSensor(Node):
 
     def update_value(self):
         self.value = self.value + 0.1
+        # add ramdom offset
+        self.value = self.value - 0.5 + random.random()
 
 def main(args=None):
     rclpy.init(args=args)
